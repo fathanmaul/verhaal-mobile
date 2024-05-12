@@ -1,0 +1,60 @@
+<resources>
+    <string name="app_name">Verhaal</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="tagline">Share Your\nIncredible Stories.</string>
+    <string name="sub_tagline">Bring your feelings, and let\'s ignite inspiration\ntogether as we share your incredible stories.</string>
+    <string name="back">Back</string>
+    <string name="dash">-</string>
+    <string name="login_heading">Let’s sign you in.</string>
+    <string name="login_sub_heading">We really missed you!</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="password_length_error">Password must be more than 8 characters</string>
+    <string name="register_heading">Join us and share \nyour stories with others.</string>
+    <string name="register_sub_heading">Before that, Please inform us about you.</string>
+    <string name="register_sub_two_heading">Relax, we keep this confidential!</string>
+    <string name="full_name">Full Name</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="email_error">Please input a valid email</string>
+    <string name="fill_all_field">Please fill all fields</string>
+    <string name="password_not_match">Confirm password doesn\'t match</string>
+    <string name="next">Next</string>
+    <string name="register_success">"You have successfully registered"</string>
+    <string name="success">Success</string>
+    <string name="okay">Okay</string>
+    <string name="an_error_occurred">An Error Occured</string>
+    <string name="_continue">Continue</string>
+    <string name="email_and_password_invalid">Email and Password invalid</string>
+    <string name="login_success">Login Success!</string>
+    <string name="email_or_password_wrong">Email or Password is wrong. Please try again</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="create">Create</string>
+    <string name="detail">Detail</string>
+    <string name="add_new_story">Add New Story</string>
+    <string name="verhaal">Verhaal</string>
+    <string name="hello_there">Hi, There!</string>
+    <string name="check_new_story_from_the_others">Check new story from the others</string>
+    <string name="thumbnail">Thumbnail</string>
+    <string name="story_image">Story Image</string>
+    <string name="lorem_ipsum_sample">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut purus eget nunc. Donec eget
+    </string>
+    <string name="detail_story">Detail Story</string>
+    <string name="what_you_would_like_to_share">What you would like to share?</string>
+    <string name="create_story">Create Story</string>
+    <string name="add_new_image">Add New Image</string>
+    <string name="story_image_preview">Story Image Preview</string>
+    <string name="submit_your_story">Submit Your Story</string>
+    <string name="submit">Submit</string>
+    <string name="uploading">Uploading…</string>
+    <string name="done_uploading">Done Uploading</string>
+    <string name="profile">Profile</string>
+    <string name="logout">Log Out</string>
+    <string name="logout_message">Are you sure to logout?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="logout_success">You have successfully logout</string>
+    <string name="icon_verhaal">Verhaal Icon</string>
+</resources>

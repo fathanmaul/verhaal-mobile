@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Verhaal</string>
+    <string name="login">Masuk</string>
+    <string name="register">Daftar</string>
+    <string name="tagline">Bagikan Kisah\nLuar Biasa Anda.</string>
+    <string name="sub_tagline">Bawalah perasaan Anda, dan mari kita menyalakan\ninspirasi bersama saat kita berbagi kisah-kisah luar biasa Anda.</string>
+    <string name="back">Kembali</string>
+    <string name="dash">-</string>
+    <string name="login_heading">Ayo masuk sebelum membagikan\ncerita anda</string>
+    <string name="login_sub_heading">Masukkan identitas anda terlebih dahulu!</string>
+    <string name="email">Email</string>
+    <string name="password">Kata Sandi</string>
+    <string name="password_length_error">Password harus lebih dari 8 karakter</string>
+    <string name="register_heading">Bergabunglah bersama kami\ndan bagikan cerita Anda dengan orang lain.</string>
+    <string name="register_sub_heading">Sebelumnya, mohon informasikan kepada kami tentang Anda.</string>
+    <string name="register_sub_two_heading">Tenang, kami menjaga kerahasiaan ini!</string>
+    <string name="full_name">Nama Lengkap</string>
+    <string name="confirm_password">Konfirmasi Password</string>
+    <string name="email_error">Masukkan email yang valid</string>
+    <string name="fill_all_field">Isilah data dengan lengkap!</string>
+    <string name="password_not_match">Konfirmasi password salah</string>
+    <string name="next">Berikutnya</string>
+    <string name="register_success">Kamu berhasil terdaftar</string>
+    <string name="success">Sukses</string>
+    <string name="okay">Oke</string>
+    <string name="an_error_occurred">Terjadi Kesalahan</string>
+    <string name="_continue">Lanjutkan</string>
+    <string name="email_and_password_invalid">Email dan Password tidak valid</string>
+    <string name="login_success">Login Berhasil!</string>
+    <string name="email_or_password_wrong">Email atau Password salah. Silahkan coba lagi!</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Halo blank fragment</string>
+    <string name="create">Buat</string>
+    <string name="detail">Detail</string>
+    <string name="add_new_story">Buat cerita baru</string>
+    <string name="verhaal">Verhaal</string>
+    <string name="hello_there">Hi!</string>
+    <string name="check_new_story_from_the_others">Lihat cerita baru dari yang lain</string>
+    <string name="thumbnail">Thumbnail</string>
+    <string name="story_image">Gambar cerita</string>
+    <string name="lorem_ipsum_sample">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut purus eget nunc. Donec eget
+    </string>
+    <string name="detail_story">Detail cerita</string>
+    <string name="what_you_would_like_to_share">Cerita apa yang ingin kamu bagikan??</string>
+    <string name="create_story">Buat Cerita</string>
+    <string name="add_new_image">Tambah gambar baru</string>
+    <string name="story_image_preview">Pratinjau gambar cerita</string>
+    <string name="submit_your_story">Kirimkan cerita anda</string>
+    <string name="submit">Kirim</string>
+    <string name="uploading">Mengunggah..</string>
+    <string name="done_uploading">Berhasil Mengunggah!</string>
+    <string name="profile">Profil</string>
+    <string name="logout">Keluar Akun</string>
+    <string name="logout_message">Yakin ingin keluar akun?</string>
+    <string name="yes">Iya</string>
+    <string name="no">Tidak</string>
+    <string name="logout_success">Kamu berhasil keluar akun!</string>
+    <string name="icon_verhaal">Verhaal Icon</string>
+</resources>
