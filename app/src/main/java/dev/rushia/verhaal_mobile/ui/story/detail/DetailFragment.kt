@@ -47,7 +47,7 @@ class DetailFragment : Fragment() {
         )[WelcomeViewModel::class.java]
         welcomeVW.getAuthToken().observe(viewLifecycleOwner) {
             viewModel.getDetailStory(
-                it.first(),
+                it ?: "",
                 DetailFragmentArgs.fromBundle(arguments as Bundle).storyId
             )
         }

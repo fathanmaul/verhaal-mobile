@@ -7,4 +7,5 @@ object Const {
     const val BEARER = "Bearer "
     const val MAXIMAL_SIZE = 1000000
     const val DELAY_SPLASH = 3000L
+    const val DELAY_REFRESH = 1000L
 }

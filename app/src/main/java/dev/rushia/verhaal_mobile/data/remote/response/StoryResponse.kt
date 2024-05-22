@@ -15,6 +15,8 @@ data class StoryResponse(
 )
 
 data class Story(
+	@field:SerializedName("id")
+	val id: String,
 
 	@field:SerializedName("photoUrl")
 	val photoUrl: String,
@@ -30,9 +32,6 @@ data class Story(
 
 	@field:SerializedName("lon")
 	val lon: Any,
-
-	@field:SerializedName("id")
-	val id: String,
 
 	@field:SerializedName("lat")
 	val lat: Any

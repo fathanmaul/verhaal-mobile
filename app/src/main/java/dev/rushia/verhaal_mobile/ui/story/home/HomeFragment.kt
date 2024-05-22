@@ -2,30 +2,42 @@ package dev.rushia.verhaal_mobile.ui.story.home
 
 import android.content.Intent
 import android.os.Bundle
-
+import android.os.Handler
+import android.os.Looper
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dev.rushia.verhaal_mobile.R
 import dev.rushia.verhaal_mobile.data.local.AuthPreferences
 import dev.rushia.verhaal_mobile.data.local.dataStore
-import dev.rushia.verhaal_mobile.data.remote.response.StoryItem
+import dev.rushia.verhaal_mobile.data.local.database.StoryDatabase
+import dev.rushia.verhaal_mobile.data.remote.retrofit.ApiConfig
+import dev.rushia.verhaal_mobile.data.repository.StoryRepository
 import dev.rushia.verhaal_mobile.databinding.FragmentHomeBinding
+import dev.rushia.verhaal_mobile.ui.maps.MapsActivity
 import dev.rushia.verhaal_mobile.ui.profile.ProfileActivity
-import dev.rushia.verhaal_mobile.ui.welcome.WelcomeActivity
-import dev.rushia.verhaal_mobile.ui.welcome.WelcomeViewModel
+import dev.rushia.verhaal_mobile.utils.Const
+import dev.rushia.verhaal_mobile.ui.auth.AuthViewModel
 import dev.rushia.verhaal_mobile.viewmodel.ViewModelFactory
+import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel = HomeViewModel()
+    private lateinit var homeViewModel: HomeStoryViewModel
+    private lateinit var authPreferences: AuthPreferences
+    private val authViewModel: AuthViewModel by viewModels {
+        ViewModelFactory(requireActivity(), authPreferences)
+    }
 
 
     override fun onCreateView(
@@ -41,44 +53,61 @@ class HomeFragment : Fragment() {
 
         val layoutManager = LinearLayoutManager(this.context)
         binding.rvStories.layoutManager = layoutManager
-        viewModel.isLoading.observe(viewLifecycleOwner) {
-            isLoading(it)
-        }
-
-        val pref = AuthPreferences.getInstance(this.requireContext().dataStore)
-        val welcomeVW = ViewModelProvider(
-            this,
-            ViewModelFactory(this.requireActivity(), pref)
-        )[WelcomeViewModel::class.java]
-
-        welcomeVW.getAuthToken().observe(viewLifecycleOwner) {
-            if (it.isEmpty()) {
-                startActivity(
-                    Intent(this.requireContext(), WelcomeActivity::class.java).addFlags(
-                        Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    )
-                )
-            } else {
-                viewModel.getListStories(it.first())
+        isLoading(false)
+        authPreferences = AuthPreferences.getInstance(
+            this.requireContext().dataStore
+        )
+        authViewModel.authToken.observe(viewLifecycleOwner) {
+            println("TOKENNNNN -> $it")
+            initializeViewModel(it!!)
+            homeViewModel.getStories()
+            getData()
+            binding.ivRefresh.setOnClickListener {
+                homeViewModel.getStories()
+            }
+            binding.swipeRefreshLayout.setOnRefreshListener {
+                homeViewModel.getStories()
+                binding.swipeRefreshLayout.isRefreshing = false
+                Handler(Looper.getMainLooper()).postDelayed({
+                    Toast.makeText(this.requireContext(), "Refreshed", Toast.LENGTH_SHORT).show()
+                    binding.rvStories.scrollToPosition(0)
+                }, Const.DELAY_REFRESH)
             }
         }
-
-        viewModel.listStories.observe(viewLifecycleOwner) {
-            setStories(it)
-        }
-
         binding.fabAddStory.setOnClickListener { view ->
             view.findNavController().navigate(R.id.action_homeFragment_to_createFragment)
         }
+
         binding.ivProfile.setOnClickListener {
             toProfile()
         }
+        binding.ivMaps.setOnClickListener {
+            toMaps()
+        }
     }
 
-    private fun setStories(story: List<StoryItem>) {
-        val adapter = StoryAdapter()
-        adapter.submitList(story)
-        binding.rvStories.adapter = adapter
+    private fun getData() {
+        lifecycleScope.launch {
+            val adapter = StoryAdapter()
+            binding.rvStories.adapter = adapter.withLoadStateFooter(
+                footer = LoadingStateAdapter { adapter.retry() }
+            )
+            homeViewModel.story.observe(viewLifecycleOwner) {
+                adapter.submitData(viewLifecycleOwner.lifecycle, it)
+            }
+        }
+    }
+
+    private fun initializeViewModel(token: String) {
+        homeViewModel = ViewModelProvider(
+            this,
+            HomeViewModelFactory(
+                StoryRepository(
+                    apiService = ApiConfig.getApiService(), token = "Bearer $token",
+                    storyDatabase = StoryDatabase.getDatabase(this.requireContext())
+                )
+            )
+        )[HomeStoryViewModel::class.java]
     }
 
     private fun isLoading(state: Boolean) {
@@ -94,4 +123,9 @@ class HomeFragment : Fragment() {
     private fun toProfile() {
         startActivity(Intent(this.requireContext(), ProfileActivity::class.java))
     }
+
+    private fun toMaps() {
+        startActivity(Intent(this.requireContext(), MapsActivity::class.java))
+    }
+
 }

@@ -3,6 +3,7 @@ package dev.rushia.verhaal_mobile.data.remote.retrofit
 import dev.rushia.verhaal_mobile.data.remote.response.ListStoriesResponse
 import dev.rushia.verhaal_mobile.data.remote.response.LoginResponse
 import dev.rushia.verhaal_mobile.data.remote.response.RegisterResponse
+import dev.rushia.verhaal_mobile.data.remote.response.StoryItem
 import dev.rushia.verhaal_mobile.data.remote.response.StoryResponse
 import dev.rushia.verhaal_mobile.data.remote.response.UploadResponse
 import okhttp3.MultipartBody
@@ -16,6 +17,7 @@ import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface ApiService {
     @FormUrlEncoded
@@ -33,8 +35,20 @@ interface ApiService {
         @Field("password") password: String
     ): Call<LoginResponse>
 
-    @GET("stories")
+    @GET("stories?location=1")
     fun getStoriesList(
+        @Header("Authorization") token: String,
+    ): Call<ListStoriesResponse>
+
+    @GET("stories")
+    suspend fun getStoriesListPage(
+        @Header("Authorization") token: String,
+        @Query("page") page: Int,
+        @Query("size") size: Int
+    ): ListStoriesResponse
+
+    @GET("stories?location=1")
+    fun getStoriesWithLocation(
         @Header("Authorization") token: String
     ): Call<ListStoriesResponse>
 
@@ -44,6 +58,16 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Part file: MultipartBody.Part,
         @Part("description") description: RequestBody,
+    ): Call<UploadResponse>
+
+    @POST("stories")
+    @Multipart
+    fun uploadStoryWithLocation(
+        @Header("Authorization") token: String,
+        @Part file: MultipartBody.Part,
+        @Part("description") description: RequestBody,
+        @Part("lat") lat: Float,
+        @Part("lon") long: Float
     ): Call<UploadResponse>
 
     @GET("stories/{id}")

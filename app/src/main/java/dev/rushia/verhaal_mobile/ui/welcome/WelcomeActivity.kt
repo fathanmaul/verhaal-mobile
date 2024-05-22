@@ -11,8 +11,8 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import dev.rushia.verhaal_mobile.R
 import dev.rushia.verhaal_mobile.databinding.ActivityWelcomeBinding
-import dev.rushia.verhaal_mobile.ui.login.LoginActivity
-import dev.rushia.verhaal_mobile.ui.register.RegisterActivity
+import dev.rushia.verhaal_mobile.ui.auth.login.LoginActivity
+import dev.rushia.verhaal_mobile.ui.auth.register.RegisterActivity
 
 class WelcomeActivity : AppCompatActivity() {
 
@@ -53,6 +53,4 @@ class WelcomeActivity : AppCompatActivity() {
             start()
         }
     }
-
-
 }

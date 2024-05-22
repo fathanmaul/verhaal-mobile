@@ -1,4 +1,4 @@
-package dev.rushia.verhaal_mobile.ui.register
+package dev.rushia.verhaal_mobile.ui.auth.register
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

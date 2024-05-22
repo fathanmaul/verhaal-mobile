@@ -1,4 +1,4 @@
-package dev.rushia.verhaal_mobile.ui.register
+package dev.rushia.verhaal_mobile.ui.auth.register
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
@@ -16,7 +16,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import dev.rushia.verhaal_mobile.R
 import dev.rushia.verhaal_mobile.components.Button
 import dev.rushia.verhaal_mobile.databinding.ActivityRegisterBinding
-import dev.rushia.verhaal_mobile.ui.login.LoginActivity
+import dev.rushia.verhaal_mobile.ui.auth.login.LoginActivity
 import dev.rushia.verhaal_mobile.utils.Validation
 
 

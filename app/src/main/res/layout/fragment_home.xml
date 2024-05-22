@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".ui.story.home.HomeFragment">
 
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -52,6 +53,27 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <ImageView
+                android:id="@+id/iv_refresh"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="12dp"
+                android:contentDescription="@string/refresh"
+                android:src="@drawable/round_refresh_24"
+                android:visibility="gone"
+                app:layout_constraintEnd_toStartOf="@id/iv_profile"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/iv_maps"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="12dp"
+                android:contentDescription="@string/open_maps"
+                android:src="@drawable/round_map_24"
+                app:layout_constraintEnd_toStartOf="@id/iv_profile"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <TextView
                 android:id="@+id/tagline"
                 android:layout_width="0dp"
@@ -64,16 +86,34 @@
                 app:layout_constraintTop_toBottomOf="@id/iv_verhaal_icon" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_stories"
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_refresh_layout"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/header"
-            tools:listitem="@layout/story_item" />
+            app:layout_constraintTop_toBottomOf="@id/header">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_stories"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:listitem="@layout/story_item" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
 
         <ProgressBar
             android:id="@+id/progress_bar"
