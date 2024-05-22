@@ -57,4 +57,14 @@
     <string name="no">No</string>
     <string name="logout_success">You have successfully logout</string>
     <string name="icon_verhaal">Verhaal Icon</string>
+    <string name="retry">Retry</string>
+    <string name="load_error">Load Error</string>
+    <string name="refresh">Refresh</string>
+    <string name="location">Location</string>
+    <string name="open_maps">Open Maps</string>
+    <string name="title_activity_maps">MapsActivity</string>
+    <string name="connection_error">Load Error. Check your internet connection!</string>
+    <string name="include_location">Include Location</string>
+    <string name="location_not_found_please_try_again">Location not found. Please turn on your GPS Location</string>
+    <string name="failed_uploading">Failed to Upload Story</string>
 </resources>

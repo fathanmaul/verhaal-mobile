@@ -1,4 +1,4 @@
-package dev.rushia.verhaal_mobile.ui.login
+package dev.rushia.verhaal_mobile.ui.auth.login
 
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
@@ -24,8 +24,8 @@ class LoginViewModel(
 
     private val loginResponse = MutableLiveData<LoginResponse?>()
 
-    var error = MutableLiveData<Boolean>()
-    var loginResult = MutableLiveData<LoginResult>()
+    val error = MutableLiveData<Boolean>()
+    val loginResult = MutableLiveData<LoginResult>()
     fun login(email: String, password: String) {
         isLoading.value = true
         val client = ApiConfig.getApiService().login(email, password)

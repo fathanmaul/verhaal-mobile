@@ -17,6 +17,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.yalantis.ucrop.UCrop
 import dev.rushia.verhaal_mobile.R
 import dev.rushia.verhaal_mobile.data.local.AuthPreferences
@@ -34,25 +36,54 @@ class CreateFragment : Fragment() {
     private val binding get() = _binding!!
 
     private var currentImageUri: Uri? = null
-
     private val viewModel = CreateViewModel()
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private var location: Array<Float?> = arrayOf(null, null)
 
     private val requestPermissionLauncher =
         registerForActivityResult(
-            ActivityResultContracts.RequestPermission()
-        ) { isGranted: Boolean ->
-            if (isGranted) {
-                showToast("Permission request granted")
-            } else {
-                showToast("Permission request denied")
+            ActivityResultContracts.RequestMultiplePermissions()
+        ) { permissions ->
+            when {
+                permissions[REQUIRED_PERMISSION] == true -> {
+                    startCamera()
+                }
+
+                permissions[REQUIRED_PERMISSION_FINE_LOCATION] == true -> {
+                    getMyLocation()
+                }
+
+                permissions[REQUIRED_PERMISSION_COARSE_LOCATION] == true -> {
+                    getMyLocation()
+                }
+
+                else -> {
+                    showToast("Permission denied")
+                }
             }
         }
 
-    private fun allPermissionsGranted() =
+    private fun cameraPermissionsGranted() =
         ContextCompat.checkSelfPermission(
             requireContext(),
             REQUIRED_PERMISSION
         ) == PackageManager.PERMISSION_GRANTED
+
+    private fun locationPermissionsGranted() =
+        ContextCompat.checkSelfPermission(
+            requireContext(),
+            REQUIRED_PERMISSION_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+            requireContext(),
+            REQUIRED_PERMISSION_COARSE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+
+    private fun checkPermission(permission: String): Boolean {
+        return ContextCompat.checkSelfPermission(
+            this.requireContext(),
+            permission
+        ) == PackageManager.PERMISSION_GRANTED
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -78,7 +109,7 @@ class CreateFragment : Fragment() {
         }
 
 
-
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this.requireContext())
 
         with(binding) {
             buttonAddMedia.setOnClickListener {
@@ -94,23 +125,68 @@ class CreateFragment : Fragment() {
                     uriToImage.reduceFileImage()
                     showToast(getString(R.string.uploading))
                     welcomeVW.getAuthToken().observe(viewLifecycleOwner) {
-                        viewModel.upload(
-                            editTextStory.text.toString(),
-                            uriToImage,
-                            token = it.first()
-                        )
+                        if (binding.checkboxLocation.isChecked) {
+                            viewModel.uploadWithLocation(
+                                description = editTextStory.text.toString(),
+                                imageFile = uriToImage,
+                                token = it ?: "",
+                                lon = location[1] ?: 0f,
+                                lat = location[0] ?: 0f
+                            )
+                        } else {
+                            viewModel.upload(
+                                editTextStory.text.toString(),
+                                uriToImage,
+                                token = it ?: ""
+                            )
+                        }
+                        viewModel.isSuccess.observe(viewLifecycleOwner) { success ->
+                            if (success) {
+                                showToast(getString(R.string.done_uploading))
+                            } else {
+                                showToast(getString(R.string.failed_uploading))
+                            }
+                        }
                     }
-                    showToast(getString(R.string.done_uploading))
                     view.findNavController().navigateUp()
                 }
             }
             buttonAddCamera.setOnClickListener {
                 startCamera()
             }
+            checkboxLocation.setOnCheckedChangeListener { _, isChecked ->
+                if (isChecked) {
+                    getMyLocation()
+                }
+            }
         }
-
-
     }
+
+    private fun getMyLocation() {
+        if (checkPermission(Manifest.permission.ACCESS_FINE_LOCATION) &&
+            checkPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
+        ) {
+            fusedLocationClient.lastLocation.addOnSuccessListener {
+                if (it != null) {
+                    showToast("Latitude: ${it.latitude}, Longitude: ${it.longitude}")
+                    location[0] = it.latitude.toFloat()
+                    location[1] = it.longitude.toFloat()
+                } else {
+                    showToast(getString(R.string.location_not_found_please_try_again))
+                    binding.checkboxLocation.isChecked = false
+                }
+            }
+        } else {
+            binding.checkboxLocation.isChecked = false
+            requestPermissionLauncher.launch(
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                )
+            )
+        }
+    }
+
 
     private fun setupToolbar(title: String) {
         activity?.findViewById<TextView>(R.id.titleToolbar)?.text = title
@@ -165,11 +241,13 @@ class CreateFragment : Fragment() {
         }
 
     private fun startCamera() {
-        if (allPermissionsGranted()) {
+        if (cameraPermissionsGranted()) {
             currentImageUri = getImageUri(requireContext())
             launcherCamera.launch(currentImageUri)
         } else {
-            requestPermissionLauncher.launch(REQUIRED_PERMISSION)
+            requestPermissionLauncher.launch(
+                arrayOf(REQUIRED_PERMISSION)
+            )
         }
     }
 
@@ -209,5 +287,9 @@ class CreateFragment : Fragment() {
 
     companion object {
         private const val REQUIRED_PERMISSION = Manifest.permission.CAMERA
+        private const val REQUIRED_PERMISSION_FINE_LOCATION =
+            Manifest.permission.ACCESS_FINE_LOCATION
+        private const val REQUIRED_PERMISSION_COARSE_LOCATION =
+            Manifest.permission.ACCESS_COARSE_LOCATION
     }
 }

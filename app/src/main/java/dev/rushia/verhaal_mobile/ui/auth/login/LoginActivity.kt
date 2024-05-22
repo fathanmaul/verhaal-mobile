@@ -1,4 +1,4 @@
-package dev.rushia.verhaal_mobile.ui.login
+package dev.rushia.verhaal_mobile.ui.auth.login
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator

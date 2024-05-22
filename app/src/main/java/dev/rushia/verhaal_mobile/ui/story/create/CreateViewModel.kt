@@ -18,6 +18,9 @@ class CreateViewModel : ViewModel() {
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: MutableLiveData<Boolean> = _isLoading
 
+    private val _isSuccess = MutableLiveData<Boolean>()
+    val isSuccess: MutableLiveData<Boolean> = _isSuccess
+
     fun upload(description: String, imageFile: File, token: String) {
         _isLoading.value = true
         val requestBody = description.toRequestBody("text/plain".toMediaType())
@@ -39,16 +42,62 @@ class CreateViewModel : ViewModel() {
             ) {
                 if (response.isSuccessful) {
                     _isLoading.value = false
+                    _isSuccess.value = true
                 } else {
                     _isLoading.value = false
+                    _isSuccess.value = false
                 }
             }
 
             override fun onFailure(call: Call<UploadResponse>, t: Throwable) {
                 _isLoading.value = false
+                _isSuccess.value = false
             }
 
         })
+    }
 
+    fun uploadWithLocation(
+        description: String,
+        imageFile: File,
+        token: String,
+        lon: Float,
+        lat: Float
+    ) {
+        _isLoading.value = true
+        val requestBody = description.toRequestBody("text/plain".toMediaType())
+        val requestImageFile = imageFile.asRequestBody("image/jpeg".toMediaType())
+        val multipartBody = MultipartBody.Part.createFormData(
+            "photo",
+            imageFile.name,
+            requestImageFile
+        )
+        val client = ApiConfig.getApiService().uploadStoryWithLocation(
+            token = StringBuilder("Bearer ").append(token).toString(),
+            file = multipartBody,
+            description = requestBody,
+            lat = lat,
+            long = lon
+        )
+        client.enqueue(object : Callback<UploadResponse> {
+            override fun onResponse(
+                call: Call<UploadResponse>,
+                response: Response<UploadResponse>
+            ) {
+                if (response.isSuccessful) {
+                    _isLoading.value = false
+                    _isSuccess.value = true
+                } else {
+                    _isLoading.value = false
+                    _isSuccess.value = false
+                }
+            }
+
+            override fun onFailure(call: Call<UploadResponse>, t: Throwable) {
+                _isLoading.value = false
+                _isSuccess.value = false
+            }
+
+        })
     }
 }

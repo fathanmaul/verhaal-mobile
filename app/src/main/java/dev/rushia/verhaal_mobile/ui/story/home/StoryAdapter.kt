@@ -3,14 +3,14 @@ package dev.rushia.verhaal_mobile.ui.story.home
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.navigation.findNavController
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import dev.rushia.verhaal_mobile.data.remote.response.StoryItem
 import dev.rushia.verhaal_mobile.databinding.StoryItemBinding
 
-class StoryAdapter : ListAdapter<StoryItem, StoryAdapter.StoryViewHolder>(DIFF_CALLBACK) {
+class StoryAdapter : PagingDataAdapter<StoryItem, StoryAdapter.StoryViewHolder>(DIFF_CALLBACK) {
     class StoryViewHolder(private val binding: StoryItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(storyItem: StoryItem) {
@@ -37,7 +37,7 @@ class StoryAdapter : ListAdapter<StoryItem, StoryAdapter.StoryViewHolder>(DIFF_C
 
     override fun onBindViewHolder(holder: StoryViewHolder, position: Int) {
         val story = getItem(position)
-        return holder.bind(story)
+        return holder.bind(story!!)
     }
 
     companion object {

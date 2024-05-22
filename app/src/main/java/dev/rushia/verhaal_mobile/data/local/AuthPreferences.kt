@@ -25,15 +25,25 @@ class AuthPreferences private constructor(
         }
     }
 
-    fun getAuthToken(): Flow<Set<String>> {
+    fun getAuthToken(): Flow<String?> {
         return dataStore.data.map { preferences ->
-            preferences[stringSetPreferencesKey(Const.TOKEN_KEY)] ?: emptySet()
+            preferences[stringSetPreferencesKey(Const.TOKEN_KEY)]?.firstOrNull()
         }
     }
 
-    fun getUserName(): Flow<Set<String>> {
+//    val authToken: Flow<String?>
+//        get() = dataStore.data.map { preferences ->
+//            preferences[stringSetPreferencesKey(Const.TOKEN_KEY)]?.firstOrNull()
+//        }
+
+//    val userName: Flow<String?>
+//        get() = dataStore.data.map { preferences ->
+//            preferences[stringSetPreferencesKey(Const.USER_NAME)]?.firstOrNull()
+//        }
+
+    fun getUserName(): Flow<String?> {
         return dataStore.data.map { preferences ->
-            preferences[stringSetPreferencesKey(Const.USER_NAME)] ?: emptySet()
+            preferences[stringSetPreferencesKey(Const.USER_NAME)]?.firstOrNull()
         }
     }
 
@@ -43,6 +53,7 @@ class AuthPreferences private constructor(
             preferences.remove(stringSetPreferencesKey(Const.USER_NAME))
         }
     }
+
     companion object {
         @Volatile
         private var INSTANCE: AuthPreferences? = null

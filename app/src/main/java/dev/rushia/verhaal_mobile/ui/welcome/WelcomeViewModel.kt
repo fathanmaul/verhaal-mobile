@@ -9,7 +9,7 @@ class WelcomeViewModel(
     private val pref: AuthPreferences
 ) : ViewModel() {
 
-    fun getAuthToken(): LiveData<Set<String>> {
+    fun getAuthToken(): LiveData<String?> {
         return pref.getAuthToken().asLiveData()
     }
 }

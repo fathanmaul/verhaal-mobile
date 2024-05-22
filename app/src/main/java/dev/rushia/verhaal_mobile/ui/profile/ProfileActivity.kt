@@ -4,10 +4,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dev.rushia.verhaal_mobile.R
@@ -15,11 +15,17 @@ import dev.rushia.verhaal_mobile.data.local.AuthPreferences
 import dev.rushia.verhaal_mobile.data.local.dataStore
 import dev.rushia.verhaal_mobile.databinding.ActivityProfileBinding
 import dev.rushia.verhaal_mobile.ui.welcome.WelcomeActivity
+import dev.rushia.verhaal_mobile.ui.auth.AuthViewModel
+import dev.rushia.verhaal_mobile.viewmodel.ViewModelFactory
 import kotlinx.coroutines.launch
 
 class ProfileActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityProfileBinding
+    private lateinit var authPreferences: AuthPreferences
+    private val authViewModel: AuthViewModel by viewModels {
+        ViewModelFactory(this, authPreferences)
+    }
 
     private val pref = AuthPreferences.getInstance(this.dataStore)
 
@@ -34,8 +40,18 @@ class ProfileActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        authPreferences = AuthPreferences.getInstance(
+            this.dataStore
+        )
+        authViewModel.authToken.observe(this) {
+            if (it.isNullOrEmpty()) {
+                startActivity(Intent(this, WelcomeActivity::class.java))
+                finish()
+            }
+        }
 
-        checkUser()
+
+
 
         with(binding) {
             btnLogout.setOnClickListener {
@@ -58,27 +74,10 @@ class ProfileActivity : AppCompatActivity() {
                     }
                     .show()
             }
-            lifecycleScope.launch {
-                pref.getUserName().asLiveData().observe(this@ProfileActivity) {
-                    if (it.isNotEmpty()) {
-                        tvName.text = it.first()
-                    }
-                }
+            authViewModel.userName.observe(this@ProfileActivity) {
+                tvName.text = it
             }
-        }
-    }
 
-    private fun checkUser() {
-        lifecycleScope.launch {
-            pref.getAuthToken().asLiveData().observe(this@ProfileActivity) {
-                if (it.isEmpty()) {
-                    startActivity(
-                        Intent(this@ProfileActivity, WelcomeActivity::class.java).addFlags(
-                            Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                        )
-                    )
-                }
-            }
         }
     }
 }
