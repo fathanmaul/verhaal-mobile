@@ -67,4 +67,6 @@
     <string name="include_location">Include Location</string>
     <string name="location_not_found_please_try_again">Location not found. Please turn on your GPS Location</string>
     <string name="failed_uploading">Failed to Upload Story</string>
+    <string name="refreshed">Refreshed</string>
+    <string name="success_uploading">Uploading Success</string>
 </resources>

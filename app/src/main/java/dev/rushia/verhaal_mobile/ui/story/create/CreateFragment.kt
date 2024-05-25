@@ -108,6 +108,14 @@ class CreateFragment : Fragment() {
             isLoading(it)
         }
 
+        viewModel.isSuccess.observe(viewLifecycleOwner) { success ->
+            if (success) {
+                showToast(getString(R.string.done_uploading))
+                view.findNavController().navigateUp()
+            } else {
+                showToast(getString(R.string.failed_uploading))
+            }
+        }
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this.requireContext())
 
@@ -121,6 +129,7 @@ class CreateFragment : Fragment() {
                 } else if (currentImageUri == null) {
                     showToast("Please add image first.")
                 } else {
+                    binding.buttonSubmit.isEnabled = false
                     val uriToImage = uriToFile(requireContext(), currentImageUri!!)
                     uriToImage.reduceFileImage()
                     showToast(getString(R.string.uploading))
@@ -140,15 +149,7 @@ class CreateFragment : Fragment() {
                                 token = it ?: ""
                             )
                         }
-                        viewModel.isSuccess.observe(viewLifecycleOwner) { success ->
-                            if (success) {
-                                showToast(getString(R.string.done_uploading))
-                            } else {
-                                showToast(getString(R.string.failed_uploading))
-                            }
-                        }
                     }
-                    view.findNavController().navigateUp()
                 }
             }
             buttonAddCamera.setOnClickListener {
@@ -186,7 +187,6 @@ class CreateFragment : Fragment() {
             )
         }
     }
-
 
     private fun setupToolbar(title: String) {
         activity?.findViewById<TextView>(R.id.titleToolbar)?.text = title

@@ -68,4 +68,6 @@
     <string name="include_location">Tambahkan Lokasi</string>
     <string name="location_not_found_please_try_again">Lokasi Tidak Ditemukan. Hidupkan GPS anda terlebih dahulu</string>
     <string name="failed_uploading">Gagal untuk mengirim cerita anda</string>
+    <string name="refreshed">Berhasil diperbarui</string>
+    <string name="success_uploading">Berhasil diunggah</string>
 </resources>

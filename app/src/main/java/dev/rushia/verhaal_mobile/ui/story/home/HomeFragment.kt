@@ -58,31 +58,44 @@ class HomeFragment : Fragment() {
             this.requireContext().dataStore
         )
         authViewModel.authToken.observe(viewLifecycleOwner) {
-            println("TOKENNNNN -> $it")
             initializeViewModel(it!!)
             homeViewModel.getStories()
             getData()
-            binding.ivRefresh.setOnClickListener {
-                homeViewModel.getStories()
-            }
             binding.swipeRefreshLayout.setOnRefreshListener {
                 homeViewModel.getStories()
                 binding.swipeRefreshLayout.isRefreshing = false
                 Handler(Looper.getMainLooper()).postDelayed({
-                    Toast.makeText(this.requireContext(), "Refreshed", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this.requireContext(),
+                        getString(R.string.refreshed),
+                        Toast.LENGTH_SHORT
+                    ).show()
                     binding.rvStories.scrollToPosition(0)
                 }, Const.DELAY_REFRESH)
             }
         }
-        binding.fabAddStory.setOnClickListener { view ->
-            view.findNavController().navigate(R.id.action_homeFragment_to_createFragment)
-        }
 
-        binding.ivProfile.setOnClickListener {
-            toProfile()
+        with(binding) {
+            fabAddStory.setOnClickListener { view ->
+                view.findNavController().navigate(R.id.action_homeFragment_to_createFragment)
+            }
+            ivProfile.setOnClickListener {
+                toProfile()
+            }
+            ivMaps.setOnClickListener {
+                toMaps()
+            }
         }
-        binding.ivMaps.setOnClickListener {
-            toMaps()
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        binding.rvStories.scrollToPosition(0)
+        authViewModel.authToken.observe(viewLifecycleOwner) {
+            initializeViewModel(it!!)
+            homeViewModel.getStories()
+            getData()
         }
     }
 
@@ -127,5 +140,4 @@ class HomeFragment : Fragment() {
     private fun toMaps() {
         startActivity(Intent(this.requireContext(), MapsActivity::class.java))
     }
-
 }

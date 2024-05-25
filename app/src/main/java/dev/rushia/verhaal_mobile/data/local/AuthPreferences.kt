@@ -31,16 +31,6 @@ class AuthPreferences private constructor(
         }
     }
 
-//    val authToken: Flow<String?>
-//        get() = dataStore.data.map { preferences ->
-//            preferences[stringSetPreferencesKey(Const.TOKEN_KEY)]?.firstOrNull()
-//        }
-
-//    val userName: Flow<String?>
-//        get() = dataStore.data.map { preferences ->
-//            preferences[stringSetPreferencesKey(Const.USER_NAME)]?.firstOrNull()
-//        }
-
     fun getUserName(): Flow<String?> {
         return dataStore.data.map { preferences ->
             preferences[stringSetPreferencesKey(Const.USER_NAME)]?.firstOrNull()
